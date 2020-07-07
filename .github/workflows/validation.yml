@@ -12,34 +12,77 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
       with:
         fetch-depth: 1
-    - name: pip
-      run: pip install requests
+
+    - name: Set up Python 3
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+  
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
     - id: set-matrix
       run: echo "::set-output name=matrix::$(python -c 'import gh_api; gh_api.matrix()')"
-  
-  validation:
+
+    - name: Cache pip directory
+      uses: actions/cache@v2
+      id: cache
+      with:
+        path: ~/.cache/pip
+        key: ${{ github.sha }}
+
+      
+  validate:
     needs: setup
     runs-on: ubuntu-latest
     continue-on-error: true
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
       fail-fast: false
       matrix: ${{fromJson(needs.setup.outputs.matrix)}}
+
     steps:
-    - id: fetch-files
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
+    
+    - name: Set up Python 3
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Restore pip cache directory
+      uses: actions/cache@v2
+      id: cache
+      with:
+        path: ~/.cache/pip
+        key: ${{ github.sha }}
+    
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Validate repository
       run: |
-        curl https://raw.githubusercontent.com/${{ matrix.gem  }}/standardizeRepo/.standard-GEM.md -o repo-standard.md
-        curl https://raw.githubusercontent.com/MetabolicAtlas/standard-GEM/${{ matrix.version }}/.standard-GEM.md -o raw-standard.md
-    - id: compare
-      run: |
-        changes=`diff -ed raw-standard.md repo-standard.md | grep "^\D" | grep "^[^\.-]" | wc -l`
-        if (( $changes > 0 )); then
-            echo "${{ matrix.gem }} does not follow standard-GEM version ${{ matrix.version }}"
-        else 
-            echo "${{ matrix.gem }} most likely follows standard-GEM version ${{ matrix.version }}"
-            # memote run -a "--tb no" path/to/model.xml
-        fi
+        python -c 'import gh_api; gh_api.validate("${{ matrix.gem }}")'
+
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
+
+    - name: Auto-commit results
+      uses: stefanzweifel/git-auto-commit-action@v4.4.0
+      with:
+        commit_user_name: validation-bot
+        commit_message: update validation results for ${{ matrix.gem }}
+        file_pattern: results/*.json
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
