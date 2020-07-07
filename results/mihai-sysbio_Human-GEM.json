@@ -1,0 +1,35 @@
+{
+  "mihai-sysbio/Human-GEM": [
+    {
+      "1.4.1": {
+        "standard-GEM": [
+          {
+            "develop": true
+          },
+          {
+            "tests": {
+              "cobrapy-yaml-load": {
+                "0.18.1": true
+              },
+              "yamllint": {
+                "1.23.0": true
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "develop": {
+        "standard-GEM": [
+          {
+            "develop": false
+          },
+          {
+            "tests": {}
+          }
+        ]
+      }
+    }
+  ]
+}
