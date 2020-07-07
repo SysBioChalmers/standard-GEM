@@ -1,0 +1,136 @@
+{
+  "SysBioChalmers/Human-GEM": [
+    {
+      "v1.1.0": {
+        "standard-GEM": [
+          {
+            "develop": false
+          },
+          {
+            "tests": {}
+          }
+        ]
+      }
+    },
+    {
+      "v1.1.1": {
+        "standard-GEM": [
+          {
+            "develop": false
+          },
+          {
+            "tests": {}
+          }
+        ]
+      }
+    },
+    {
+      "v1.1.2": {
+        "standard-GEM": [
+          {
+            "develop": false
+          },
+          {
+            "tests": {}
+          }
+        ]
+      }
+    },
+    {
+      "v1.1.3": {
+        "standard-GEM": [
+          {
+            "develop": false
+          },
+          {
+            "tests": {}
+          }
+        ]
+      }
+    },
+    {
+      "v1.2.0": {
+        "standard-GEM": [
+          {
+            "develop": false
+          },
+          {
+            "tests": {}
+          }
+        ]
+      }
+    },
+    {
+      "v1.2.1": {
+        "standard-GEM": [
+          {
+            "develop": false
+          },
+          {
+            "tests": {}
+          }
+        ]
+      }
+    },
+    {
+      "v1.3.0": {
+        "standard-GEM": [
+          {
+            "develop": false
+          },
+          {
+            "tests": {}
+          }
+        ]
+      }
+    },
+    {
+      "v1.3.1": {
+        "standard-GEM": [
+          {
+            "develop": false
+          },
+          {
+            "tests": {}
+          }
+        ]
+      }
+    },
+    {
+      "v1.3.2": {
+        "standard-GEM": [
+          {
+            "develop": false
+          },
+          {
+            "tests": {}
+          }
+        ]
+      }
+    },
+    {
+      "v1.4.0": {
+        "standard-GEM": [
+          {
+            "develop": false
+          },
+          {
+            "tests": {}
+          }
+        ]
+      }
+    },
+    {
+      "develop": {
+        "standard-GEM": [
+          {
+            "develop": false
+          },
+          {
+            "tests": {}
+          }
+        ]
+      }
+    }
+  ]
+}
