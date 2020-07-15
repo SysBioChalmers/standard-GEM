@@ -11,16 +11,11 @@ header_auth = {'Authorization': 'token %s' % api_token}
 model_filename = 'model.yml'
 
 def gem_repositories():
-    json_request = {"query" : "{ search(type: REPOSITORY, query: \"\"\"topic:standard-GEM\"\"\", first: 100) { repos: edges { repo: node { ... on Repository { nameWithOwner forks(first: 100) { fork: nodes { nameWithOwner } } } } } } }" }
+    json_request = {"query" : "{ search(type: REPOSITORY, query: \"\"\"fork:true topic:standard-GEM\"\"\", first: 100) { repos: edges { repo: node { ... on Repository { nameWithOwner } } } } }" }
     r = requests.post(url=api_endpoint, json=json_request, headers=header_auth)
-    filtered_repositories = []
-    for repo in json.loads(r.text)['data']['search']['repos']:
-        repo = repo['repo']
-        nameWithOwner = repo['nameWithOwner']
-        if 'standard-GEM' not in nameWithOwner:
-            filtered_repositories.append(nameWithOwner)
-            for fork in repo['forks']['fork']:
-                filtered_repositories.append(fork['nameWithOwner'])
+    json_data = json.loads(r.text)['data']['search']['repos']
+    gem_repositories = map(lambda x: x['repo']['nameWithOwner'], json_data)
+    filtered_repositories = filter(lambda x: 'standard-GEM' not in x, gem_repositories)
     return filtered_repositories
 
 def releases(nameWithOwner):
